@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ user ? 'Manage User' : 'Add New User' }}</h4>
+  <button type="button" class="btn-close" (click)="onCloseClick()" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+   <app-add-user-form [user]="user" ></app-add-user-form>
+  <div *ngIf="user && user.id" class="d-flex justify-content-between align-items-center mt-3">
+    <button (click)="onSubmitClicked()" class="btn btn-success mx-auto" type="button">Update</button>
+    <button (click)="removeUser(user.id)" class="btn btn-danger" type="button">Delete</button>
+  </div>
+  <div *ngIf="!user" class="d-flex justify-content-between align-items-center mt-3">
+    <button (click)="onSubmitClicked()" class="btn btn-success mx-auto" type="button">Add</button>
+  </div>
+</div>
+
+

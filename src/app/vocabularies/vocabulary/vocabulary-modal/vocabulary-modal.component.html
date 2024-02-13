@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ translation ? 'Manage word' : 'Add New word' }}</h4>
+  <button type="button" class="btn-close" (click)="onCloseClick()" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  <app-add-vocabulary-form [translation]="translation" [vocabulary]="vocabulary" [vocabularyRange]="vocabularyRange"></app-add-vocabulary-form>
+  <div *ngIf="translation && translation.id" class="d-flex justify-content-between align-items-center mt-3">
+    <button (click)="onSubmitClicked()" class="btn btn-success mx-auto" type="button">Update</button>
+    <button (click)="removeVocabulary(translation.id)" class="btn btn-danger" type="button">Delete</button>
+  </div>
+  <div *ngIf="!translation" class="d-flex justify-content-between align-items-center mt-3">
+    <button (click)="onSubmitClicked()" class="btn btn-success mx-auto" type="button">Add</button>
+  </div>
+</div>
+

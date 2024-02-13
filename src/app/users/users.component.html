@@ -1,0 +1,22 @@
+<div class="card text-center">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <h4 class="mx-auto">All Users</h4>
+      <ng-container *ngIf="userService.hasAdminRole()">
+        <button (click)="addUser()" class="btn btn-outline-primary mb-3" type="button">Add new user</button>
+      </ng-container>
+    </div>
+  </div>
+  <div *ngIf="loggedUser"  class="card-body">
+    <div *ngFor="let user of users">
+      <div class="row">
+        <div class="col-md-4 offset-md-4">
+          <app-user [user]="user"></app-user>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer text-muted">
+    Footer ...in progress
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<form (ngSubmit)="onSubmit()">
+  <div *ngIf="errors && errors.length > 0" class="alert alert-danger">
+    <ul>
+      <li *ngFor="let error of errors">{{ error }}</li>
+    </ul>
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text">Name</span>
+    <input [(ngModel)]="form.firstName" name="firstName" class="form-control">
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text d-block">Surname</span>
+    <input [(ngModel)]="form.lastName" name="lastName" class="form-control"/>
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text d-block">Email</span>
+    <input [(ngModel)]="form.email" name="email" class="form-control"/>
+  </div>
+  <div *ngIf="!user" class="input-group mb-3">
+    <span class="input-group-text d-block">Password</span>
+    <input [(ngModel)]="form.password" name="password" class="form-control"/>
+  </div>
+  <div class="mb-3">
+    <label id="roles">Roles:</label><br/>
+    <select [(ngModel)]="form.roles" name="roles" multiple class="form-select form-select-sm"
+            aria-label=".form-select-sm example">
+      <option *ngFor="let role of roles" [value]="role " >{{ role | roleDisplayName }}</option>
+    </select>
+  </div>
+</form>

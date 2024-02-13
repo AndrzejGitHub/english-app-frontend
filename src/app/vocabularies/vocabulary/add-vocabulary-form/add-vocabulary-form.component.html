@@ -1,0 +1,40 @@
+<form (ngSubmit)="onSubmit()">
+<!--  <div *ngIf="errors " class="alert alert-danger">-->
+<!--    <ul>-->
+<!--      <li *ngFor="let error of splitErrors()">{{ error }}</li>-->
+<!--    </ul>-->
+<!--  </div>-->
+  <div *ngIf="errors && errors.length > 0" class="alert alert-danger">
+    <ul>
+      <li *ngFor="let error of errors">{{ error }}</li>
+    </ul>
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text">English word</span>
+    <input [(ngModel)]="form.translation.vocabulary.englishWord" name="englishWord" class="form-control">
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text">Part of speech</span>
+    <div class="input-group-append">
+    </div>
+    <select [(ngModel)]="form.translation.partOfSpeech" name="partOfSpeech" id="partOfSpeechSelect" class="form-control">
+      <option value="" disabled selected>Select part of speech</option>
+      <option *ngFor="let partOfSpeech of partOfSpeechOptions" [ngValue]="partOfSpeech">{{ partOfSpeech.name }}</option>
+    </select>
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text d-block">Polish Meaning</span>
+    <input [(ngModel)]="form.translation.translationVariant.polishMeaning" name="polishMeaning" class="form-control"/>
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text d-block">Image URL</span>
+    <input [(ngModel)]="form.translation.vocabulary.imageURL" name="imageURL" class="form-control"/>
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text d-block">Vocabulary Range</span>
+    <input [ngModel]="form.vocabularyRange ? form.vocabularyRange.vocabulary_range : null"
+           (ngModelChange)="form.vocabularyRange ? form.vocabularyRange.vocabulary_range = $event : null"
+           name="vocabulary_range"
+           class="form-control"/>
+  </div>
+</form>

@@ -1,0 +1,46 @@
+<div class="card text-center">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <h4 class="mx-auto">English Vocabularies</h4>
+      <ng-container *ngIf="userService.hasAdminRole()">
+        <button (click)="addEnglishWord()" class="btn btn-outline-primary mb-3" type="button">Add new word</button>
+      </ng-container>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-4 offset-md-4">
+        <form (ngSubmit)="searchVocabulary()">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" [(ngModel)]="searchTerm" name="searchTerm">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div *ngFor="let translationWithVocabularyRange of translationsWithVocabularyRange; let i = index">
+    <ng-container *ngIf="shouldDisplayTranslation(translationWithVocabularyRange.translation, i)">
+      <div class="text-center">
+        <h4>{{ translationWithVocabularyRange.translation.vocabulary.englishWord }}</h4>
+      </div>
+      <span class="part-of-speech">{{ translationWithVocabularyRange.translation.partOfSpeech.name }} </span>
+    </ng-container>
+    <div class="col-md-4 mx-auto">
+      <img *ngIf="translationWithVocabularyRange.translation.vocabulary.imageURL" width="100px"
+           [src]="'assets/images/' + translationWithVocabularyRange.translation.vocabulary.imageURL"
+           alt="Vocabulary Image" class="img-fluid">
+    </div>
+    <h6 *ngIf="translationWithVocabularyRange.translation.translationVariant?.polishMeaning" style="margin-top: 5px;">
+      {{ getPolishMeaningNumber(i) }}. {{ translationWithVocabularyRange.translation.translationVariant.polishMeaning }}
+      <ng-container *ngIf="userService.hasAdminRole()">
+        <button type="button" class="btn btn-outline-primary mb-3"
+                (click)="onManageVocabulary(translationWithVocabularyRange)">Edit
+        </button>
+      </ng-container>
+    </h6>
+  </div>
+</div>
+
+
+

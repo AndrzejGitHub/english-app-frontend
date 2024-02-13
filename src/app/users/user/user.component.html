@@ -1,0 +1,27 @@
+<div *ngIf="user?.id" xmlns="http://www.w3.org/1999/html"
+     class="accordion accordion-flush" id="accordionFlush">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button (click)="toggleDetails()" class="accordion-button" type="button"
+              [class.collapsed]="!showUserDetails" [class.collaps]="showUserDetails"
+              [attr.aria-controls]="'flush-collapse' + user.id">
+        {{ user.email }}
+      </button>
+    </h2>
+    <div [ngbCollapse]="!showUserDetails" id="'flush-collapse' + user.id" class="accordion-collapse collapse">
+      <div class="input-group mb-3">
+        <span class="input-group-text">Name</span>
+        <span class="form-control">{{ user.firstName }}</span>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">Surname</span>
+        <span class="form-control">{{ user.lastName }}</span>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">Email</span>
+        <span class="form-control">{{ user.email }}</span>
+      </div>
+      <button type="button" class="btn btn-outline-primary mb-3" (click)="onManageUser()">Manage User</button>
+    </div>
+  </div>
+</div>

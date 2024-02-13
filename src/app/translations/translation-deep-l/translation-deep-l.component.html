@@ -1,0 +1,40 @@
+<div class="container mt-3">
+  <div class="row">
+    <div class="col">
+      <div class="card text-center">
+        <div class="card-header">
+          <h4 class="mx-auto">{{ isEnglishToPolish ? 'English Text' : 'Polish Text' }}</h4>
+        </div>
+      </div>
+      <div class="translation-container mt-3">
+        <div class="input-container">
+          <textarea id="english-text" [(ngModel)]="translation" class="w-100 custom-textarea"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto align-items-center justify-content-center d-flex">
+      <button class="btn btn-link p-0" (click)="swapTranslations()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path
+            d="M16.59 8l-4.58 4.59L12 14l6-6-6-6-1.41 1.41L16.59 8zM6.59 16l4.58-4.59L12 10l-6 6 6 6 1.41-1.41L6.59 16z"/>
+          <path fill="none" d="M0 0h24v24H0z"/>
+        </svg>
+      </button>
+    </div>
+    <div class="col">
+      <div class="card text-center">
+        <div class="card-header">
+          <h4 class="mx-auto">{{ isEnglishToPolish ? 'Polish Translation' : 'English Translation' }}</h4>
+        </div>
+      </div>
+      <div class="translation-container mt-3">
+        <div class="output-container">
+          <textarea id="polish-translation" readonly class="w-100 custom-textarea">{{ translatedText }}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center mt-3">
+    <button class="btn btn-primary" (click)="translateText()">Translate</button>
+  </div>
+</div>

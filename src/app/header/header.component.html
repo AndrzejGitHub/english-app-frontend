@@ -1,0 +1,17 @@
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+  <a class="navbar-brand" routerLink="/vocabularies">Home</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" routerLink="/translation-deep-l">Translation</a>
+      <a class="nav-item nav-link active" routerLink="/vocabularies">Vocabularies</a>
+      <a class="nav-item nav-link" routerLink="/users">Users</a>
+      <button class="nav-item nav-link btn btn-link" (click)="logout()" *ngIf="loggedUser">Logout</button>
+      <button class="nav-item nav-link btn btn-link" (click)="goToLogin()" *ngIf="!loggedUser">Login</button>
+      <p *ngIf="error" class="text-danger">{{ error }}</p>
+    </div>
+  </div>
+</nav>
