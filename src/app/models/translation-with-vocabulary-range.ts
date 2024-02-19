@@ -1,24 +1,4 @@
 export interface TranslationWithVocabularyRange {
-  // translation: {
-  //   id: undefined;
-  //   partOfSpeech: { id: undefined; name: '' };
-  //   vocabulary: {
-  //     id: undefined;
-  //     englishWord: '';
-  //     imageURL: '';
-  //   };
-  //   translationVariant: { id: undefined; polishMeaning: '' };
-  // };
-  // vocabularyRange: {
-  //   id: undefined;
-  //   vocabulary_range: undefined;
-  //   vocabulary: {
-  //     id: undefined;
-  //     englishWord: '';
-  //     imageURL: '';
-  //   };
-  // };
-
   translation: Translation
   vocabularyRange: VocabularyRange
 }

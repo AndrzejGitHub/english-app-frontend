@@ -10,6 +10,7 @@ import {TranslationWithVocabularyRange} from "../../../models/translation-with-v
 import {VocabularyRange} from "../../../models/vocabulary-range";
 import {HttpErrorResponse} from "@angular/common/http";
 
+
 @Component({
   selector: 'app-add-vocabulary-form',
   templateUrl: './add-vocabulary-form.component.html',
@@ -50,42 +51,37 @@ export class AddVocabularyFormComponent implements OnInit {
   partOfSpeechOptions: PartOfSpeech[] = [];
 
   constructor(
-    private translationService: TranslationService, // Use TranslationService
+    private translationService: TranslationService,
     private bsModalRef: BsModalRef,
     private eventService: EventService,
     private partOfSpeechService: PartOfSpeechService
   ) {
   }
 
-  loadPartOfSpeech() {
+
+  ngOnInit(): void {
     this.partOfSpeechService.getPartOfSpeech().subscribe(
       {
-        next: value => {
-          this.partOfSpeechOptions = value
+        next: getPartOfSpeeches => {
+          this.partOfSpeechOptions = getPartOfSpeeches
+          if (this.translation) {
+            this.form.translation.id = this.translation.id;
+            this.form.translation.vocabulary.id = this.translation.vocabulary.id;
+            this.form.translation.vocabulary.englishWord = this.translation.vocabulary.englishWord;
+            this.form.translation.vocabulary.imageURL = this.translation.vocabulary.imageURL;
+            this.form.vocabularyRange.id = this.vocabularyRange?.id;
+            this.form.vocabularyRange.vocabulary_range = this.vocabularyRange?.vocabulary_range;
+            this.form.vocabularyRange.vocabulary.id = this.translation.vocabulary.id;
+            this.form.vocabularyRange.vocabulary.englishWord = this.translation.vocabulary.englishWord;
+            this.form.vocabularyRange.vocabulary.imageURL = this.translation.vocabulary.imageURL;
+            this.form.translation.partOfSpeech = this.translation.partOfSpeech;
+            this.form.translation.translationVariant.id = this.translation.translationVariant.id;
+            this.form.translation.translationVariant.polishMeaning = this.translation.translationVariant.polishMeaning;
+          }
         }
       }
     )
   }
-
-  ngOnInit(): void {
-    this.loadPartOfSpeech();
-    if (this.translation) {
-      this.form.translation.id = this.translation?.id;
-      this.form.translation.vocabulary.id = this.translation.vocabulary.id;
-      this.form.translation.vocabulary.englishWord = this.translation.vocabulary.englishWord;
-      this.form.translation.vocabulary.imageURL = this.translation.vocabulary.imageURL;
-      this.form.vocabularyRange.id = this.vocabularyRange?.id;
-      this.form.vocabularyRange.vocabulary_range = this.vocabularyRange?.vocabulary_range;
-      this.form.vocabularyRange.vocabulary.id = this.translation.vocabulary.id;
-      this.form.vocabularyRange.vocabulary.englishWord = this.translation.vocabulary.englishWord;
-      this.form.vocabularyRange.vocabulary.imageURL = this.translation.vocabulary.imageURL;
-      this.form.translation.partOfSpeech.id = this.translation.partOfSpeech.id;
-      this.form.translation.partOfSpeech.name = this.translation.partOfSpeech.name;
-      this.form.translation.translationVariant.id = this.translation.translationVariant.id;
-      this.form.translation.translationVariant.polishMeaning = this.translation.translationVariant.polishMeaning;
-    }
-  }
-
 
   onSubmit(): void {
     this.errors = [];
@@ -113,23 +109,6 @@ export class AddVocabularyFormComponent implements OnInit {
         }
       }
     )
-
-
-    // this.form.translation.id
-    //   ? this.translationService.editTranslationWithVocabularyRange(this.form).subscribe({
-    //     next: () => {
-    //       this.eventService.emitTranslationWithVocabularyRangeUpdate(this.form);
-    //       this.resetForm();
-    //       this.bsModalRef.hide();
-    //     }
-    //   })
-    //   : this.translationService.addTranslationWithVocabularyRange(this.form).subscribe({
-    //     next: () => {
-    //       this.eventService.emitTranslationWithVocabularyRangeInsert(this.form);
-    //       this.resetForm();
-    //       this.bsModalRef.hide();
-    //     }
-    //   });
   }
 
   resetForm(): void {
@@ -155,11 +134,5 @@ export class AddVocabularyFormComponent implements OnInit {
       },
     };
   }
-
-  // splitErrors(): string[] {
-  //
-  //   this.errors ? console.log(this.errors.split(";")) : console.log([]);
-  //   return this.errors ? this.errors.split(";") : [];
-  // }
 
 }

@@ -1,9 +1,4 @@
 <form (ngSubmit)="onSubmit()">
-<!--  <div *ngIf="errors " class="alert alert-danger">-->
-<!--    <ul>-->
-<!--      <li *ngFor="let error of splitErrors()">{{ error }}</li>-->
-<!--    </ul>-->
-<!--  </div>-->
   <div *ngIf="errors && errors.length > 0" class="alert alert-danger">
     <ul>
       <li *ngFor="let error of errors">{{ error }}</li>
@@ -17,9 +12,12 @@
     <span class="input-group-text">Part of speech</span>
     <div class="input-group-append">
     </div>
-    <select [(ngModel)]="form.translation.partOfSpeech" name="partOfSpeech" id="partOfSpeechSelect" class="form-control">
+    <select [(ngModel)]="form.translation.partOfSpeech" name="partOfSpeech" id="partOfSpeechSelect"
+            class="form-control">
       <option value="" disabled selected>Select part of speech</option>
-      <option *ngFor="let partOfSpeech of partOfSpeechOptions" [ngValue]="partOfSpeech">{{ partOfSpeech.name }}</option>
+      <option *ngFor="let partOfSpeech of partOfSpeechOptions" [ngValue]="partOfSpeech">
+        {{ partOfSpeech.name }}
+      </option>
     </select>
   </div>
   <div class="input-group mb-3">
