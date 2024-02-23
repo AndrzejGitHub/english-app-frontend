@@ -13,7 +13,7 @@ import {Router} from "@angular/router";
 export class LoginComponent {
 
   form = this.fb.group({
-    username: ['basia@wp.pl', [Validators.required, Validators.maxLength(20)]],
+    username: ['jan@wp.pl', [Validators.required, Validators.maxLength(20)]],
     password: ['@Basia@1234', [Validators.required, Validators.maxLength(20)]],
     rememberMe: false,
   });
@@ -30,7 +30,7 @@ export class LoginComponent {
     }
     const loginData = this.form.value as LoginData;
     this.userService.login(loginData)
-      .pipe(switchMap(value => this.userService.whoAmI()))
+      .pipe(switchMap(() => this.userService.whoAmI()))
       .subscribe({
         next: value => {
           this.userService.setLoggedUser(value);

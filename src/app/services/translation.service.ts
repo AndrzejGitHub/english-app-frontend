@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {environment} from "../environment/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Vocabulary} from "../models/vocabulary";
 import {Translation} from "../models/translation";
 import {TranslationWithVocabularyRange} from "../models/translation-with-vocabulary-range";
 

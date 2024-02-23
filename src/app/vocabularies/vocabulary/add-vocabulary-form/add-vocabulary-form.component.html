@@ -28,11 +28,28 @@
     <span class="input-group-text d-block">Image URL</span>
     <input [(ngModel)]="form.translation.vocabulary.imageURL" name="imageURL" class="form-control"/>
   </div>
-  <div class="input-group mb-3">
-    <span class="input-group-text d-block">Vocabulary Range</span>
-    <input [ngModel]="form.vocabularyRange ? form.vocabularyRange.vocabulary_range : null"
-           (ngModelChange)="form.vocabularyRange ? form.vocabularyRange.vocabulary_range = $event : null"
-           name="vocabulary_range"
-           class="form-control"/>
+  <div class="input-group mb-3 d-flex flex-column align-items-center" style="border: 1px solid #ccc; padding: 10px;">
+    <div class="mb-3">
+      Find another word to merge
+    </div>
+    <form (ngSubmit)="searchVocabulary()">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" [(ngModel)]="searchTerm" name="searchTerm">
+        <button class="btn btn-success" type="submit">Search</button>
+      </div>
+    </form>
+    <div class="input-group mb-3 d-flex flex-column align-items-center">
+      <div *ngIf="searchSuccessMessage">Word <strong> {{ searchSuccessMessage }} </strong> exists in dictionary.</div>
+      <div *ngIf="searchErrorMessage">Word <strong>{{ searchErrorMessage }}</strong> does not exists in dictionary.
+      </div>
+      <div>
+        <input type="checkbox" [(ngModel)]="includeVocabularyRange" name="includeVocabularyRange"
+               class="form-check-input"
+               id="includeVocabularyRange" [disabled]="!searchSuccessMessage"
+               (change)="onIncludeVocabularyRangeChange($event)">
+        <label class="form-check-label" for="includeVocabularyRange">Merge
+        </label>
+      </div>
+    </div>
   </div>
 </form>

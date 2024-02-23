@@ -5,7 +5,6 @@ import {EventService} from "../services/event.service";
 import {switchMap} from "rxjs";
 import {UserModalComponent} from "./user/user-modal/user-modal.component";
 import {BsModalService} from "ngx-bootstrap/modal";
-import {HttpErrorResponse} from "@angular/common/http";
 import {UserRole} from "../models/user-role.enum";
 
 @Component({
@@ -60,7 +59,7 @@ export class UsersComponent implements OnInit {
       )
       .subscribe(
         {
-          next: users => this.getUsers(),
+          next: () => this.getUsers(),
           error: (error) => {
             console.error("Unable to load data from the database. Please try again later. ", error)
           }

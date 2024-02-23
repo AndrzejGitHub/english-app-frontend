@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {BsModalRef} from "ngx-bootstrap/modal";
-import {EventService} from "../../../services/event.service";
 import {Vocabulary} from "../../../models/vocabulary";
 import {Translation} from "../../../models/translation";
 import {TranslationService} from "../../../services/translation.service";
@@ -9,7 +8,9 @@ import {PartOfSpeechService} from "../../../services/part-of-speech.service";
 import {TranslationWithVocabularyRange} from "../../../models/translation-with-vocabulary-range";
 import {VocabularyRange} from "../../../models/vocabulary-range";
 import {HttpErrorResponse} from "@angular/common/http";
-
+import {VocabularySearchService} from "../../../services/vocabulary.search.service";
+import {VocabularyRangeService} from "../../../services/vocabulary-range.service";
+import {catchError, EMPTY, map, of, switchMap} from "rxjs";
 
 @Component({
   selector: 'app-add-vocabulary-form',
@@ -24,6 +25,16 @@ export class AddVocabularyFormComponent implements OnInit {
   @Output() onSubmitClicked: EventEmitter<void> = new EventEmitter<void>();
 
   errors: string[] = [];
+  partOfSpeechOptions: PartOfSpeech[] = [];
+  searchErrorMessage: string = '';
+  searchSuccessMessage: string = '';
+
+  searchSuccessVocabularyRange: number | undefined;
+  mergeVocabularyRange: number | undefined;
+  updatingVocabularyVocabularyRange: number | undefined;
+  searchSuccessVocabulary: Vocabulary | undefined;
+  searchTerm: string | undefined;
+  includeVocabularyRange: boolean = false;
 
   form: TranslationWithVocabularyRange = {
     translation: {
@@ -47,17 +58,12 @@ export class AddVocabularyFormComponent implements OnInit {
     },
   };
 
-
-  partOfSpeechOptions: PartOfSpeech[] = [];
-
-  constructor(
-    private translationService: TranslationService,
-    private bsModalRef: BsModalRef,
-    private eventService: EventService,
-    private partOfSpeechService: PartOfSpeechService
-  ) {
+  constructor(private translationService: TranslationService,
+              private bsModalRef: BsModalRef,
+              private partOfSpeechService: PartOfSpeechService,
+              private vocabularySearchService: VocabularySearchService,
+              private vocabularyRangeService: VocabularyRangeService) {
   }
-
 
   ngOnInit(): void {
     this.partOfSpeechService.getPartOfSpeech().subscribe(
@@ -85,18 +91,15 @@ export class AddVocabularyFormComponent implements OnInit {
 
   onSubmit(): void {
     this.errors = [];
+    if ((this.includeVocabularyRange) && (!this.updatingVocabularyVocabularyRange)) {
+      this.form.vocabularyRange.vocabulary_range = this.mergeVocabularyRange;
+    }
+
     const translationServiceMethod = this.form.translation.id
       ? this.translationService.editTranslationWithVocabularyRange(this.form)
       : this.translationService.addTranslationWithVocabularyRange(this.form)
-
-    translationServiceMethod.subscribe(
-      {
-        next: (translation) => {
-          if (this.form.translation.id) {
-            this.eventService.emitTranslationWithVocabularyRangeUpdate(translation);
-          } else {
-            this.eventService.emitTranslationWithVocabularyRangeInsert(translation);
-          }
+    translationServiceMethod.subscribe({
+        next: () => {
           this.resetForm();
           this.bsModalRef.hide();
         },
@@ -109,6 +112,22 @@ export class AddVocabularyFormComponent implements OnInit {
         }
       }
     )
+    if (this.includeVocabularyRange) {
+      this.vocabularyRangeService.mergeUpdatingVocabularyWithSearchingWord(this.searchSuccessVocabulary!, this.mergeVocabularyRange!)
+        .subscribe({
+            next: () => {
+              // TODO mergeUpdatingVocabularyWithSearchingWord success
+            },
+            error: (errorResponse: HttpErrorResponse) => {
+              if (errorResponse.error && errorResponse.error.messages) {
+                this.errors = errorResponse.error.messages[0].trim().split(';');
+              } else {
+                this.errors = ['An unexpected error occurred. Please try again.'];
+              }
+            }
+          }
+        )
+    }
   }
 
   resetForm(): void {
@@ -133,6 +152,67 @@ export class AddVocabularyFormComponent implements OnInit {
         },
       },
     };
+  }
+
+  searchVocabulary() {
+    if (this.searchTerm) {
+      const cleanedSearchTerm = this.searchTerm.replace(/\s+/g, ' ');
+      this.vocabularySearchService.searchVocabulary(cleanedSearchTerm)
+        .pipe(
+          switchMap((results) => {
+            if (results && results.length > 0) {
+              this.searchErrorMessage = '';
+              this.searchSuccessMessage = this.searchTerm!;
+              const resultOfSearchingVocabulary = results[0];
+              this.searchSuccessVocabulary = resultOfSearchingVocabulary;
+              this.searchSuccessMessage = resultOfSearchingVocabulary.englishWord;
+              if (this.vocabularyRange) {
+                this.updatingVocabularyVocabularyRange = this.vocabularyRange.vocabulary_range;
+              } else {
+                this.updatingVocabularyVocabularyRange = undefined;
+              }
+              return this.vocabularyRangeService.getVocabularyRangeByEnglishWord(cleanedSearchTerm)
+                .pipe(
+                  map((vr) => {
+                    this.searchSuccessVocabularyRange = vr.vocabulary_range;
+                    return null;
+                  }),
+                  catchError(err => {
+                    this.searchSuccessVocabularyRange = undefined;
+                    return of(null);
+                  })
+                );
+            } else {
+              this.searchErrorMessage = this.searchTerm!;
+              this.searchSuccessMessage = '';
+              return of(null);
+            }
+          }),
+          switchMap(() => {
+            if (this.updatingVocabularyVocabularyRange) {
+              return of(this.updatingVocabularyVocabularyRange);
+            } else {
+              if (this.searchSuccessVocabularyRange) {
+                return of(this.searchSuccessVocabularyRange);
+              } else {
+                return this.vocabularyRangeService.getMaxVocabularyRange().pipe(
+                  catchError(err => {
+                    this.errors = ['An unexpected error occurred. Please try again.'];
+                    return EMPTY;
+                  })
+                );
+              }
+            }
+          })
+        )
+        .subscribe((value) => {
+          this.mergeVocabularyRange = value;
+        });
+    }
+  }
+
+  onIncludeVocabularyRangeChange(event: any) {
+    this.includeVocabularyRange = event.target.checked
   }
 
 }

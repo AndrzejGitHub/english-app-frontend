@@ -16,11 +16,9 @@ import {ImgFallbackModule} from 'ngx-img-fallback';
 import { HeaderComponent } from './header/header.component';
 import { VocabularyModalComponent } from './vocabularies/vocabulary/vocabulary-modal/vocabulary-modal.component';
 import { AddVocabularyFormComponent } from './vocabularies/vocabulary/add-vocabulary-form/add-vocabulary-form.component';
-import { TranslationComponent } from './translations/translation/translation/translation.component';
 import { TranslationDeepLComponent } from './translations/translation-deep-l/translation-deep-l.component';
 import { RoleDisplayNamePipe } from './pipes/role-display-name.pipe';
 import { LoginComponent } from './login/login.component';
-
 
 const routes: Route[] = [
   {path: 'users', component: UsersComponent, canActivate: []},
@@ -41,7 +39,6 @@ const routes: Route[] = [
     HeaderComponent,
     VocabularyModalComponent,
     AddVocabularyFormComponent,
-    TranslationComponent,
     TranslationDeepLComponent,
     RoleDisplayNamePipe,
     LoginComponent
@@ -55,8 +52,7 @@ const routes: Route[] = [
     RouterModule.forRoot(routes),
     ModalModule.forRoot(),
     ImgFallbackModule,
-    ReactiveFormsModule,
-    // NgOptimizedImage,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

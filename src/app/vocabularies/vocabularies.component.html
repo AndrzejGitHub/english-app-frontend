@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-between align-items-center mt-3">
       <h4 class="mx-auto">English Vocabularies</h4>
       <ng-container *ngIf="userService.hasAdminRole()">
-        <button (click)="addEnglishWord()" class="btn btn-outline-primary mb-3" type="button">Add new word</button>
+        <button (click)="openModalAddEnglishWord()" class="btn btn-outline-primary mb-3" type="button">Add new word</button>
       </ng-container>
     </div>
   </div>

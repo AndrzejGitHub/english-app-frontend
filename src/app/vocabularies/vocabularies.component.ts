@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EventService} from "../services/event.service";
-import {BsModalService} from "ngx-bootstrap/modal";
+import {BsModalService, ModalOptions} from "ngx-bootstrap/modal";
 import {Vocabulary} from "../models/vocabulary";
 import {VocabularySearchService} from "../services/vocabulary.search.service";
 import {Translation} from "../models/translation";
@@ -24,13 +24,13 @@ export class VocabulariesComponent implements OnInit {
   translationsWithVocabularyRange: TranslationWithVocabularyRange[] | undefined;
   searchTerm: string | undefined;
   selectedVocabularyRangeId: number | undefined;
-  @Input() translation: Translation | undefined;
 
-  constructor(private vocabularySearchService: VocabularySearchService,
-              private modalService: BsModalService,
-              private eventService: EventService,
-              private translationService: TranslationService,
-              public userService:UserService) {
+  constructor(
+    private modalService: BsModalService,
+    private eventService: EventService,
+    private vocabularySearchService: VocabularySearchService,
+    private translationService: TranslationService,
+    public userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -40,21 +40,24 @@ export class VocabulariesComponent implements OnInit {
   onManageVocabulary(translationWithVocabularyRange: TranslationWithVocabularyRange) {
     const initialState = {
       translation: translationWithVocabularyRange.translation,
-      vocabulary : translationWithVocabularyRange.translation.vocabulary,
-      vocabularyRange : translationWithVocabularyRange.vocabularyRange,
-      translationWithVocabularyRange : translationWithVocabularyRange,
+      vocabulary: translationWithVocabularyRange.translation.vocabulary,
+      vocabularyRange: translationWithVocabularyRange.vocabularyRange,
+      translationWithVocabularyRange: translationWithVocabularyRange,
       onRemoveVocabularyClick: this.onRemoveVocabularyClick.bind(this)
     };
     this.modalService.show(VocabularyModalComponent, {initialState});
   }
 
-  addEnglishWord() {
-    const initialState = {}
-    this.modalService.show(VocabularyModalComponent, {initialState});
+  openModalAddEnglishWord() {
+    const config: ModalOptions = {
+      initialState: {},
+    };
+    this.modalService.show(VocabularyModalComponent, config);
   }
 
   onRemoveVocabularyClick(translationId: number): void {
     this.eventService.emitTranslationRemoval(translationId);
+
   }
 
   private subscribeToTranslationRemovalEvent(): void {
@@ -64,7 +67,8 @@ export class VocabulariesComponent implements OnInit {
       )
       .subscribe(
         {
-          next: () => { this.searchTerm='';
+          next: () => {
+            this.searchTerm = '';
             this.translationsWithVocabularyRange = [];
             this.translations = [];
             this.vocabularyRange = undefined;
@@ -94,8 +98,8 @@ export class VocabulariesComponent implements OnInit {
         .subscribe((translationsWithVocabularyRange) => {
           this.translationsWithVocabularyRange = translationsWithVocabularyRange;
           this.translations = translationsWithVocabularyRange.map(item => item.translation);
-          this.vocabularyRange = translationsWithVocabularyRange.map(item => item.vocabularyRange)[0]; // Zakładam, że vocabularyRange jest jednym obiektem
-          this.selectedVocabularyRangeId ?  this.vocabularyRange.vocabulary_range : null;
+          this.vocabularyRange = translationsWithVocabularyRange.map(item => item.vocabularyRange)[0];
+          this.selectedVocabularyRangeId ? this.vocabularyRange.vocabulary_range : null;
         });
     }
   }

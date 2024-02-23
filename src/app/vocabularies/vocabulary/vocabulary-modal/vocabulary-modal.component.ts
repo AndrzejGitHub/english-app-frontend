@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {BsModalRef} from "ngx-bootstrap/modal";
 import {Vocabulary} from "../../../models/vocabulary";
 import {AddVocabularyFormComponent} from "../add-vocabulary-form/add-vocabulary-form.component";
@@ -13,8 +13,8 @@ import {TranslationWithVocabularyRange} from "../../../models/translation-with-v
 })
 export class VocabularyModalComponent {
 
-  @Input() vocabulary: Vocabulary | undefined;
-  @Input() translation: Translation | undefined;
+  @Input() vocabulary: Vocabulary | undefined
+  @Input() translation: Translation | undefined
   @Input() vocabularyRange: VocabularyRange | undefined;
   @Input() translationWithVocabularyRange : TranslationWithVocabularyRange | undefined;
   @Input() onRemoveVocabularyClick: (translationId: number ) => void = () => {};

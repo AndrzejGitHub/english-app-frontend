@@ -1,8 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {VocabularySearchService} from "../services/vocabulary.search.service";
-import {BsModalService} from "ngx-bootstrap/modal";
-import {EventService} from "../services/event.service";
-import {TranslationService} from "../services/translation.service";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user";
 import {Router} from "@angular/router";

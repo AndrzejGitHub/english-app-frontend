@@ -45,7 +45,6 @@ export class AddUserFormComponent implements OnInit {
     }
   }
 
-
   onSubmit(): void {
     this.errors = [];
     if (this.form.roles && this.form.roles.length === 1 && this.form.roles[0] === '') {
@@ -86,7 +85,6 @@ export class AddUserFormComponent implements OnInit {
       password: ''
     };
   }
-
 
 
 }
