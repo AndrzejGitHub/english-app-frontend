@@ -19,6 +19,9 @@
       </div>
     </div>
   </div>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
   <div *ngFor="let translationWithVocabularyRange of translationsWithVocabularyRange; let i = index">
     <ng-container *ngIf="shouldDisplayTranslation(translationWithVocabularyRange.translation, i)">
       <div class="text-center">

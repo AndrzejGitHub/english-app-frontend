@@ -13,7 +13,7 @@ import {Router} from "@angular/router";
 export class LoginComponent {
 
   form = this.fb.group({
-    username: ['jan@wp.pl', [Validators.required, Validators.maxLength(20)]],
+    username: ['jan@example.com', [Validators.required, Validators.maxLength(20)]],
     password: ['@Basia@1234', [Validators.required, Validators.maxLength(20)]],
     rememberMe: false,
   });

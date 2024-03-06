@@ -24,6 +24,7 @@ export class VocabulariesComponent implements OnInit {
   translationsWithVocabularyRange: TranslationWithVocabularyRange[] | undefined;
   searchTerm: string | undefined;
   selectedVocabularyRangeId: number | undefined;
+  errorMessage: string | undefined;
 
   constructor(
     private modalService: BsModalService,
@@ -75,7 +76,7 @@ export class VocabulariesComponent implements OnInit {
             this.selectedVocabularyRangeId = undefined;
           },
           error: (error) => {
-            console.error("Unable to load data from the database. Please try again later. ", error)
+            this.errorMessage = error;
           }
         }
       );
@@ -88,9 +89,10 @@ export class VocabulariesComponent implements OnInit {
         .pipe(
           catchError((error) => {
             if (error.status === 404) {
-              console.log(`The english word "${cleanedSearchTerm}" was not found.`);
+              this.errorMessage = `The english word "${cleanedSearchTerm}" was not found.`;
               return this.translationsWithVocabularyRange = [];
             } else {
+              this.errorMessage = error;
               throw error;
             }
           })
