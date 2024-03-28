@@ -1,0 +1,14 @@
+services:
+  web:
+    build:
+      context: angular
+      target: builder
+    ports:
+      - 4200:4200
+    networks:
+      - angular-spring
+    volumes:
+      - ./angular:/project
+      - /project/node_modules
+networks:
+  angular-spring: { }
